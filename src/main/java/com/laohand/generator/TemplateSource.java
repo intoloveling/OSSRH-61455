@@ -46,4 +46,10 @@ public interface TemplateSource {
      * @return
      */
     String getSqlBuilderTemplate();
+
+    /**
+     * spring boot application核心启动类配置文件
+     * @return
+     */
+    String getApplicationTemplate();
 }

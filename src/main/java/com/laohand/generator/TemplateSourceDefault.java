@@ -24,9 +24,7 @@ public class TemplateSourceDefault implements TemplateSource {
                 "import PACKAGE.service.CLASS_NAME_UPPERService;\n" +
                 "import org.springframework.beans.factory.annotation.Autowired;\n" +
                 "import org.springframework.validation.annotation.Validated;\n" +
-                "import org.springframework.web.bind.annotation.RequestMapping;\n" +
-                "import org.springframework.web.bind.annotation.ResponseBody;\n" +
-                "import org.springframework.web.bind.annotation.RestController;\n" +
+                "import org.springframework.web.bind.annotation.*;\n" +
                 "/**\n" +
                 " * @Author: LiuBing\n" +
                 " * @Description generator\n" +
@@ -46,7 +44,7 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     * @param CLASS_NAME_LOWER\n" +
                 "     * @return\n" +
                 "     */\n" +
-                "    @RequestMapping(\"/save\")\n" +
+                "    @PostMapping(\"/save\")\n" +
                 "    @ResponseBody\n" +
                 "    public Object save(CLASS_NAME_UPPER CLASS_NAME_LOWER) {\n" +
                 "        Integer ret = CLASS_NAME_LOWERService.save(CLASS_NAME_LOWER);\n" +
@@ -59,9 +57,9 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     * @param param\n" +
                 "     * @return\n" +
                 "     */\n" +
-                "    @RequestMapping(\"/list\")\n" +
+                "    @PostMapping(\"/list\")\n" +
                 "    @ResponseBody\n" +
-                "    public Object list(JSONObject param) {\n" +
+                "    public Object list(@RequestBody JSONObject param) {\n" +
                 "        return CLASS_NAME_LOWERService.list(param);\n" +
                 "    }\n" +
                 "\n" +
@@ -71,7 +69,7 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     * @param id\n" +
                 "     * @return\n" +
                 "     */\n" +
-                "    @RequestMapping(\"/updateStatus\")\n" +
+                "    @PutMapping(\"/updateStatus\")\n" +
                 "    @ResponseBody\n" +
                 "    public Object updateStatus(Integer id) {\n" +
                 "        if (id == null || id < 0) {\n" +
@@ -119,11 +117,10 @@ public class TemplateSourceDefault implements TemplateSource {
     public String getServiceTemplate() {
         return "package PACKAGE.service;\n" +
                 "\n" +
-                "import com.github.pagehelper.PageInfo;\n" +
                 "import com.alibaba.fastjson.JSONObject;\n"+
                 "import PACKAGE.pojo.CLASS_NAME_UPPER;\n"+
+                "import java.util.Map;\n"+
                 "\n" +
-                "import java.util.List;\n" +
                 "/**\n" +
                 " * @Author: LiuBing\n" +
                 " * @Description generator $\n" +
@@ -153,7 +150,7 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     * @param param\n" +
                 "     * @return\n" +
                 "     */\n" +
-                "    public PageInfo<CLASS_NAME_UPPER> list(JSONObject param);"+
+                "    public Map<String, Object> list(JSONObject param);"+
                 "\n" +
                 "    /**\n" +
                 "     * 更新数据\n" +
@@ -178,9 +175,11 @@ public class TemplateSourceDefault implements TemplateSource {
                 "import com.github.pagehelper.PageHelper;\n" +
                 "import com.alibaba.fastjson.JSONObject;\n"+
                 "import PACKAGE.pojo.CLASS_NAME_UPPER;\n" +
+                "import com.github.pagehelper.PageInfo;\n" +
                 "import PACKAGE.mapper.CLASS_NAME_UPPERMapper;\n" +
                 "import PACKAGE.service.CLASS_NAME_UPPERService;\n" +
-                "import com.github.pagehelper.PageInfo;\n" +
+                "import java.util.HashMap;\n" +
+                "import java.util.Map;\n" +
                 "import org.springframework.beans.factory.annotation.Autowired;\n" +
                 "import org.springframework.stereotype.Service;\n" +
                 "import org.springframework.transaction.annotation.Transactional;\n"+
@@ -233,12 +232,15 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     * @return\n" +
                 "     */\n" +
                 "    @Override\n"+
-                "    public PageInfo<CLASS_NAME_UPPER> list(JSONObject param) {\n" +
+                "    public Map<String, Object> list(JSONObject param) {\n" +
                 "        List<CLASS_NAME_UPPER> list = CLASS_NAME_LOWERMapper.list(param);\n" +
                 "        PageHelper.startPage(Integer.parseInt(String.valueOf(param.get(\"page\"))), Integer.parseInt(String.valueOf(param.get(\"size\"))));\n" +
                 "        PageInfo<CLASS_NAME_UPPER> pageInfo = new PageInfo<>(list);\n" +
                 "        long total = pageInfo.getTotal();\n" +
-                "        return pageInfo;\n" +
+                "        Map<String,Object> pages = new HashMap<>();\n" +
+                "        pages.put(\"total\",pageInfo.getTotal());\n" +
+                "        pages.put(\"list\",pageInfo.getList());\n"+
+                "        return pages;\n" +
                 "    }\n" +
                 "\n" +
                 "    /**\n" +
@@ -329,6 +331,34 @@ public class TemplateSourceDefault implements TemplateSource {
                 "        sql.SELECT(\"*\").FROM(\"TABLE_NAME\");\n" +
                 "        sql.ORDER_BY(\"id DESC\");\n" +
                 "        return sql.toString();\n" +
+                "    }\n" +
+                "}";
+    }
+
+
+    /**
+     * spring boot application生成器模板
+     *
+     * @return
+     */
+    @Override
+    public String getApplicationTemplate() {
+        return "package PACKAGE;\n" +
+                "\n" +
+                "import org.springframework.boot.SpringApplication;\n"+
+                "import org.springframework.boot.autoconfigure.SpringBootApplication;\n" +
+                "import tk.mybatis.spring.annotation.MapperScan;\n" +
+                "\n" +
+                "/**\n" +
+                " * @Author: LiuBing\n" +
+                " * @Description generator\n" +
+                " * @Version: 1.0\n" +
+                " */\n" +
+                "@SpringBootApplication\n"+
+                "@MapperScan(basePackages = \"PACKAGE.mapper\")\n"+
+                "public class CLASS_NAME_UPPERApplication {\n" +
+                " public static void main(String[] args) {\n" +
+                "        SpringApplication.run(CLASS_NAME_UPPERApplication.class,args);\n" +
                 "    }\n" +
                 "}";
     }

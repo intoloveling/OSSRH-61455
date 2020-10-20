@@ -38,7 +38,21 @@ public class CodeGenerator {
      * @throws IOException
      */
     public static void gen(String sql, String packageName, String moduleName, String savePath) throws IOException {
-        gen(sql, packageName, moduleName, savePath, new TemplateSourceDefault(), null);
+        gen(sql, packageName, moduleName, savePath, new TemplateSourceDefault(),null);
+    }
+
+    /**
+     * 生成模块
+     *
+     * @param sql         创建数据表文件
+     * @param packageName 模块基本包命
+     * @param moduleName  模块名称
+     * @param savePath    模块保存路径
+     * @param isOpenApplication  是否开启application启动类
+     * @throws IOException
+     */
+    public static void gen(String sql, String packageName, String moduleName, String savePath,boolean isOpenApplication) throws IOException {
+        gen(sql, packageName, moduleName, savePath, new TemplateSourceDefault(), isOpenApplication,null);
     }
 
     /**
@@ -65,7 +79,7 @@ public class CodeGenerator {
      * @param templateSource 模板字符串内容
      * @throws IOException
      */
-    public static void gen(String sql, String packageName, String moduleName, String savePath, TemplateSource templateSource, Map<String, String> userReplace) throws IOException {
+    public static void gen(String sql, String packageName, String moduleName, String savePath, TemplateSource templateSource,Map<String, String> userReplace) throws IOException {
         ClassInfo classInfo = TableParseUtil.parseSql(sql);
         classInfo.setPackageName(packageName);
         classInfo.setModuleName(moduleName);
@@ -77,6 +91,34 @@ public class CodeGenerator {
         createFile(classInfo, "service", classInfo.getClassName() + "Service.java", templateSource.getServiceTemplate(), userReplace);
         createFile(classInfo, "mapper", classInfo.getClassName() + "Mapper.java", templateSource.getMapperTemplate(), userReplace);
         createFile(classInfo, "mapper", classInfo.getClassName() + "SqlBuilder.java", templateSource.getSqlBuilderTemplate(), userReplace);
+    }
+
+    /**
+     * 生成文件
+     *
+     * @param sql            创建数据表文件
+     * @param packageName    模块基本包命，生成的模块将会放在该包下面
+     * @param moduleName     模块名称
+     * @param savePath       模块保存路径，需要传绝地路径
+     * @param templateSource 模板字符串内容
+     * @param isOpenApplication 是否开启spring boot application核心启动类
+     * @throws IOException
+     */
+    public static void gen(String sql, String packageName, String moduleName, String savePath, TemplateSource templateSource, boolean isOpenApplication,Map<String, String> userReplace) throws IOException {
+        ClassInfo classInfo = TableParseUtil.parseSql(sql);
+        classInfo.setPackageName(packageName);
+        classInfo.setModuleName(moduleName);
+        classInfo.setBaseSavePath(savePath);
+        System.out.println("【INFO】classInfo => " + classInfo.toString());
+        createFile(classInfo, "controller", classInfo.getClassName() + "Controller.java", templateSource.getControllerTemplate(), userReplace);
+        createFile(classInfo, "pojo", classInfo.getClassName() + ".java", templateSource.getPojoTemplate(), userReplace);
+        createFile(classInfo, "service" + File.separator + "impl", classInfo.getClassName() + "ServiceImpl.java", templateSource.getServiceImplTemplate(), userReplace);
+        createFile(classInfo, "service", classInfo.getClassName() + "Service.java", templateSource.getServiceTemplate(), userReplace);
+        createFile(classInfo, "mapper", classInfo.getClassName() + "Mapper.java", templateSource.getMapperTemplate(), userReplace);
+        createFile(classInfo, "mapper", classInfo.getClassName() + "SqlBuilder.java", templateSource.getSqlBuilderTemplate(), userReplace);
+        if (isOpenApplication == true){
+            createFile(classInfo, null, classInfo.getClassName() + "Application.java", templateSource.getApplicationTemplate(), userReplace);
+        }
     }
 
     /**
@@ -93,7 +135,13 @@ public class CodeGenerator {
         if (tpl == null | "".equals(tpl)) {
             return;
         }
-        String saveFileName = classInfo.getBaseSavePath() + File.separator + classInfo.getPackageName()+"."+classInfo.getModuleName()+ File.separator + path + File.separator + fileName;
+        String saveFileName = "";
+        if (path == null){
+             saveFileName = classInfo.getBaseSavePath() + File.separator + classInfo.getPackageName()+"."+classInfo.getModuleName()+ File.separator + File.separator + fileName;
+        }else {
+            saveFileName = classInfo.getBaseSavePath() + File.separator + classInfo.getPackageName()+"."+classInfo.getModuleName()+ File.separator + path + File.separator + fileName;
+        }
+
         tpl = tpl.replaceAll("CLASS_NAME_UPPER", classInfo.getClassName());
         tpl = tpl.replaceAll("CLASS_NAME_LOWER", classInfo.getClassNameLowerFirst());
         tpl = tpl.replaceAll("TABLE_NAME", classInfo.getTableName());
