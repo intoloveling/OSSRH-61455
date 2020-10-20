@@ -93,12 +93,12 @@ public class CodeGenerator {
         if (tpl == null | "".equals(tpl)) {
             return;
         }
-        String saveFileName = classInfo.getBaseSavePath() + File.separator + classInfo.getModuleName() + File.separator + path + File.separator + fileName;
+        String saveFileName = classInfo.getBaseSavePath() + File.separator + classInfo.getPackageName()+"."+classInfo.getModuleName()+ File.separator + path + File.separator + fileName;
         tpl = tpl.replaceAll("CLASS_NAME_UPPER", classInfo.getClassName());
         tpl = tpl.replaceAll("CLASS_NAME_LOWER", classInfo.getClassNameLowerFirst());
         tpl = tpl.replaceAll("TABLE_NAME", classInfo.getTableName());
         tpl = tpl.replaceAll("TABLE_COMMENT", classInfo.getTableName());
-        tpl = tpl.replaceAll("PACKAGE", classInfo.getPackageName() + "." + classInfo.getModuleName());
+        tpl = tpl.replaceAll("PACKAGE", classInfo.getPackageName()+"."+classInfo.getModuleName());
         //用户自定义变量替换
         if (userReplace != null) {
             for (Map.Entry<String, String> entry : userReplace.entrySet()) {

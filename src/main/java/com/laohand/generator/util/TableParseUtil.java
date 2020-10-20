@@ -1,7 +1,6 @@
 package com.laohand.generator.util;
 
 
-import com.laohand.generator.util.StringUtil;
 import com.laohand.generator.pojo.ClassInfo;
 import com.laohand.generator.pojo.Column;
 
@@ -13,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  * 将创建表的sql字符串解析成为对象
  *
- * @author dennis
+ * @author liuBing
  */
 public class TableParseUtil {
     private TableParseUtil() {

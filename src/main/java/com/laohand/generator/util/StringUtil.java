@@ -2,7 +2,7 @@ package com.laohand.generator.util;
 
 
 /**
- * @author dennis
+ * @author liuBing
  */
 public class StringUtil {
     private StringUtil() {

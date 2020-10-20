@@ -1,7 +1,7 @@
 package com.laohand.generator.pojo;
 
 /**
- * @author dennis
+ * @author liuBing
  */
 public class Column {
     private String fieldName;

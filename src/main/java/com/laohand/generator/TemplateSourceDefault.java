@@ -1,7 +1,11 @@
 package com.laohand.generator;
 
+
 /**
- * @author dennis
+ * @Author: LiuBing
+ * @Description //TODO $
+ * @Date: ${DATE} ${TIME}
+ * @Version: 1.0
  */
 public class TemplateSourceDefault implements TemplateSource {
     /**
@@ -13,26 +17,28 @@ public class TemplateSourceDefault implements TemplateSource {
     public String getControllerTemplate() {
         return "package PACKAGE.controller;\n" +
                 "\n" +
-                "\n" +
-                "import com.foundao.common.pojo.PageParamWraper;\n" +
+                "import com.alibaba.fastjson.JSONObject;\n"+
+                "import org.slf4j.Logger;\n" +
+                "import org.slf4j.LoggerFactory;\n"+
                 "import PACKAGE.pojo.CLASS_NAME_UPPER;\n" +
-                "import PACKAGE.service.impl.CLASS_NAME_UPPERServiceImpl;\n" +
-                "import com.foundao.common.common.ServerResponse;\n" +
+                "import PACKAGE.service.CLASS_NAME_UPPERService;\n" +
                 "import org.springframework.beans.factory.annotation.Autowired;\n" +
                 "import org.springframework.validation.annotation.Validated;\n" +
                 "import org.springframework.web.bind.annotation.RequestMapping;\n" +
                 "import org.springframework.web.bind.annotation.ResponseBody;\n" +
                 "import org.springframework.web.bind.annotation.RestController;\n" +
-                "\n" +
                 "/**\n" +
-                " * @author dennis\n" +
+                " * @Author: LiuBing\n" +
+                " * @Description generator\n" +
+                " * @Version: 1.0\n" +
                 " */\n" +
                 "@RestController\n" +
                 "@RequestMapping(path = \"/CLASS_NAME_LOWER\")\n" +
                 "@Validated\n" +
                 "public class CLASS_NAME_UPPERController {\n" +
                 "    @Autowired\n" +
-                "    private CLASS_NAME_UPPERServiceImpl CLASS_NAME_LOWERService;\n" +
+                "    private CLASS_NAME_UPPERService CLASS_NAME_LOWERService;\n" +
+                "    private Logger logger = LoggerFactory.getLogger(this.getClass());\n"+
                 "\n" +
                 "    /**\n" +
                 "     * 新增/更新数据\n" +
@@ -42,21 +48,21 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     */\n" +
                 "    @RequestMapping(\"/save\")\n" +
                 "    @ResponseBody\n" +
-                "    public ServerResponse save(CLASS_NAME_UPPER CLASS_NAME_LOWER) {\n" +
+                "    public Object save(CLASS_NAME_UPPER CLASS_NAME_LOWER) {\n" +
                 "        Integer ret = CLASS_NAME_LOWERService.save(CLASS_NAME_LOWER);\n" +
-                "        return ServerResponse.createBySuccessResReturnData(ret);\n" +
+                "        return ret;\n" +
                 "    }\n" +
                 "\n" +
                 "    /**\n" +
                 "     * 分页列表\n" +
                 "     *\n" +
-                "     * @param pageParamWraper\n" +
+                "     * @param param\n" +
                 "     * @return\n" +
                 "     */\n" +
                 "    @RequestMapping(\"/list\")\n" +
                 "    @ResponseBody\n" +
-                "    public ServerResponse list(PageParamWraper pageParamWraper) {\n" +
-                "        return ServerResponse.createBySuccessResReturnData(CLASS_NAME_LOWERService.list(pageParamWraper));\n" +
+                "    public Object list(JSONObject param) {\n" +
+                "        return CLASS_NAME_LOWERService.list(param);\n" +
                 "    }\n" +
                 "\n" +
                 "    /**\n" +
@@ -67,11 +73,11 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     */\n" +
                 "    @RequestMapping(\"/updateStatus\")\n" +
                 "    @ResponseBody\n" +
-                "    public ServerResponse updateStatus(Integer id) {\n" +
+                "    public Object updateStatus(Integer id) {\n" +
                 "        if (id == null || id < 0) {\n" +
-                "            return ServerResponse.createByErrorResReturnMsg(\"Params id Error\");\n" +
+                "            return \"Params id Error\";\n" +
                 "        }\n" +
-                "        return ServerResponse.createBySuccessResReturnData(CLASS_NAME_LOWERService.updateStatus(id, 2));\n" +
+                "        return CLASS_NAME_LOWERService.updateStatus(id, 2);\n" +
                 "    }\n" +
                 "}\n";
     }
@@ -92,11 +98,11 @@ public class TemplateSourceDefault implements TemplateSource {
                 "import javax.persistence.Table;\n" +
                 "import java.io.Serializable;\n" +
                 "import java.util.Date;\n" +
-                "\n" +
-                "/**\n" +
-                " * TABLE_COMMENT\n" +
-                " * @author dennis\n" +
-                " */\n" +
+                "/*\n" +
+                " * @Author: LiuBing\n" +
+                " * @Description generator\n" +
+                " * @Version: 1.0\n" +
+                " */" +
                 "@Data\n" +
                 "@Table(name = \"TABLE_NAME\")\n" +
                 "public class CLASS_NAME_UPPER implements Serializable {\n" +
@@ -111,7 +117,53 @@ public class TemplateSourceDefault implements TemplateSource {
      */
     @Override
     public String getServiceTemplate() {
-        return "";
+        return "package PACKAGE.service;\n" +
+                "\n" +
+                "import com.github.pagehelper.PageInfo;\n" +
+                "import com.alibaba.fastjson.JSONObject;\n"+
+                "import PACKAGE.pojo.CLASS_NAME_UPPER;\n"+
+                "\n" +
+                "import java.util.List;\n" +
+                "/**\n" +
+                " * @Author: LiuBing\n" +
+                " * @Description generator $\n" +
+                " * @Version: 1.0\n" +
+                " */" +
+                "public interface CLASS_NAME_UPPERService {\n" +
+                "\n" +
+                "    /**\n" +
+                "     * 新增/更新数据\n" +
+                "     *\n" +
+                "     * @param CLASS_NAME_LOWER\n" +
+                "     * @return Integer\n" +
+                "     */\n" +
+                "    public Integer save(CLASS_NAME_UPPER CLASS_NAME_LOWER);" +
+                "\n" +
+                "    /**\n" +
+                "     * 通过id获取一条记录\n" +
+                "     *\n" +
+                "     * @param id\n" +
+                "     * @return CLASS_NAME_UPPER\n" +
+                "     */\n" +
+                "    public CLASS_NAME_UPPER getRowById(Integer id);" +
+                "\n" +
+                "    /**\n" +
+                "     * 分页列表\n" +
+                "     *\n" +
+                "     * @param param\n" +
+                "     * @return\n" +
+                "     */\n" +
+                "    public PageInfo<CLASS_NAME_UPPER> list(JSONObject param);"+
+                "\n" +
+                "    /**\n" +
+                "     * 更新数据\n" +
+                "     *\n" +
+                "     * @param id\n" +
+                "     * @param status\n" +
+                "     * @return\n" +
+                "     */\n" +
+                "    public Integer updateStatus(Integer id, Integer status);" +
+                "}\n";
     }
 
     /**
@@ -123,24 +175,24 @@ public class TemplateSourceDefault implements TemplateSource {
     public String getServiceImplTemplate() {
         return "package PACKAGE.service.impl;\n" +
                 "\n" +
-                "import com.foundao.common.pojo.PageParamWraper;\n" +
-                "import com.foundao.common.pojo.PageWraper;\n" +
-                "import PACKAGE.mapper.CLASS_NAME_UPPERMapper;\n" +
-                "import PACKAGE.pojo.CLASS_NAME_UPPER;\n" +
                 "import com.github.pagehelper.PageHelper;\n" +
+                "import com.alibaba.fastjson.JSONObject;\n"+
+                "import PACKAGE.pojo.CLASS_NAME_UPPER;\n" +
+                "import PACKAGE.mapper.CLASS_NAME_UPPERMapper;\n" +
+                "import PACKAGE.service.CLASS_NAME_UPPERService;\n" +
                 "import com.github.pagehelper.PageInfo;\n" +
-                "import lombok.extern.slf4j.Slf4j;\n" +
                 "import org.springframework.beans.factory.annotation.Autowired;\n" +
                 "import org.springframework.stereotype.Service;\n" +
+                "import org.springframework.transaction.annotation.Transactional;\n"+
                 "\n" +
                 "import java.util.List;\n" +
-                "\n" +
                 "/**\n" +
-                " * @author Dennis\n" +
-                " */\n" +
+                " * @Author: LiuBing\n" +
+                " * @Description generator $\n" +
+                " * @Version: 1.0\n" +
+                " */" +
                 "@Service\n" +
-                "@Slf4j\n" +
-                "public class CLASS_NAME_UPPERServiceImpl {\n" +
+                "public class CLASS_NAME_UPPERServiceImpl implements CLASS_NAME_UPPERService {\n" +
                 "\n" +
                 "    @Autowired\n" +
                 "    private CLASS_NAME_UPPERMapper CLASS_NAME_LOWERMapper;\n" +
@@ -151,6 +203,8 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     * @param CLASS_NAME_LOWER\n" +
                 "     * @return Integer\n" +
                 "     */\n" +
+                "    @Override\n"+
+                "    @Transactional(rollbackFor = Exception.class)\n"+
                 "    public Integer save(CLASS_NAME_UPPER CLASS_NAME_LOWER) {\n" +
                 "        int ret;\n" +
                 "        if (CLASS_NAME_LOWER.getId() == null || CLASS_NAME_LOWER.getId() <= 0) {\n" +
@@ -167,6 +221,7 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     * @param id\n" +
                 "     * @return CLASS_NAME_UPPER\n" +
                 "     */\n" +
+                "    @Override\n"+
                 "    public CLASS_NAME_UPPER getRowById(Integer id) {\n" +
                 "        return CLASS_NAME_LOWERMapper.getRowById(id);\n" +
                 "    }\n" +
@@ -174,15 +229,16 @@ public class TemplateSourceDefault implements TemplateSource {
                 "    /**\n" +
                 "     * 分页列表\n" +
                 "     *\n" +
-                "     * @param pageParamWraper\n" +
+                "     * @param param\n" +
                 "     * @return\n" +
                 "     */\n" +
-                "    public PageWraper list(PageParamWraper pageParamWraper) {\n" +
-                "        PageHelper.startPage(pageParamWraper.getPage(), pageParamWraper.getNum());\n" +
-                "        List<CLASS_NAME_UPPER> list = CLASS_NAME_LOWERMapper.list(pageParamWraper);\n" +
+                "    @Override\n"+
+                "    public PageInfo<CLASS_NAME_UPPER> list(JSONObject param) {\n" +
+                "        List<CLASS_NAME_UPPER> list = CLASS_NAME_LOWERMapper.list(param);\n" +
+                "        PageHelper.startPage(Integer.parseInt(String.valueOf(param.get(\"page\"))), Integer.parseInt(String.valueOf(param.get(\"size\"))));\n" +
                 "        PageInfo<CLASS_NAME_UPPER> pageInfo = new PageInfo<>(list);\n" +
                 "        long total = pageInfo.getTotal();\n" +
-                "        return new PageWraper(total, list);\n" +
+                "        return pageInfo;\n" +
                 "    }\n" +
                 "\n" +
                 "    /**\n" +
@@ -192,6 +248,8 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     * @param status\n" +
                 "     * @return\n" +
                 "     */\n" +
+                "    @Override\n"+
+                "    @Transactional(rollbackFor = Exception.class)\n"+
                 "    public Integer updateStatus(Integer id, Integer status) {\n" +
                 "        CLASS_NAME_UPPER CLASS_NAME_LOWER = new CLASS_NAME_UPPER();\n" +
                 "        CLASS_NAME_LOWER.setId(id);\n" +
@@ -211,7 +269,7 @@ public class TemplateSourceDefault implements TemplateSource {
     public String getMapperTemplate() {
         return "package PACKAGE.mapper;\n" +
                 "\n" +
-                "import com.foundao.common.pojo.PageParamWraper;\n" +
+                "import com.alibaba.fastjson.JSONObject;\n"+
                 "import PACKAGE.pojo.CLASS_NAME_UPPER;\n" +
                 "import org.apache.ibatis.annotations.Mapper;\n" +
                 "import org.apache.ibatis.annotations.Select;\n" +
@@ -220,22 +278,22 @@ public class TemplateSourceDefault implements TemplateSource {
                 "import tk.mybatis.mapper.common.BaseMapper;\n" +
                 "\n" +
                 "import java.util.List;\n" +
-                "\n" +
-                "\n" +
                 "/**\n" +
-                " * @author dennis\n" +
-                " */\n" +
+                " * @Author: LiuBing\n" +
+                " * @Description generator\n" +
+                " * @Version: 1.0\n" +
+                " */" +
                 "@Mapper\n" +
                 "@Repository\n" +
                 "public interface CLASS_NAME_UPPERMapper extends BaseMapper<CLASS_NAME_UPPER> {\n" +
                 "    /**\n" +
                 "     * 列表\n" +
                 "     *\n" +
-                "     * @param pageParamWraper\n" +
+                "     * @param param\n" +
                 "     * @return\n" +
                 "     */\n" +
                 "    @SelectProvider(type = CLASS_NAME_UPPERSqlBuilder.class, method = \"list\")\n" +
-                "    List<CLASS_NAME_UPPER> list(PageParamWraper pageParamWraper);\n" +
+                "    List<CLASS_NAME_UPPER> list(JSONObject param);\n" +
                 "\n" +
                 "    /**\n" +
                 "     * 获取一条记录\n" +
@@ -257,14 +315,16 @@ public class TemplateSourceDefault implements TemplateSource {
     public String getSqlBuilderTemplate() {
         return "package PACKAGE.mapper;\n" +
                 "\n" +
-                "import com.foundao.common.pojo.PageParamWraper;\n" +
+                "import com.alibaba.fastjson.JSONObject;\n"+
                 "import org.apache.ibatis.jdbc.SQL;\n" +
                 "\n" +
                 "/**\n" +
-                " * @author dennis\n" +
-                " */\n" +
+                " * @Author: LiuBing\n" +
+                " * @Description generator\n" +
+                " * @Version: 1.0\n" +
+                " */" +
                 "public class CLASS_NAME_UPPERSqlBuilder {\n" +
-                "    public String list(PageParamWraper pageParamWraper) {\n" +
+                "    public String list(JSONObject param) {\n" +
                 "        SQL sql = new SQL();\n" +
                 "        sql.SELECT(\"*\").FROM(\"TABLE_NAME\");\n" +
                 "        sql.ORDER_BY(\"id DESC\");\n" +

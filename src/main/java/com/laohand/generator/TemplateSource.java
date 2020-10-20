@@ -1,7 +1,7 @@
 package com.laohand.generator;
 
 /**
- * @author dennis
+ * @author liuBing
  */
 public interface TemplateSource {
     /**

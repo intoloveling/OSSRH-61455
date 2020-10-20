@@ -3,7 +3,7 @@ package com.laohand.generator.pojo;
 import java.util.List;
 
 /**
- * @author dennis
+ * @author liuBing
  */
 public class ClassInfo {
     private String tableName;
