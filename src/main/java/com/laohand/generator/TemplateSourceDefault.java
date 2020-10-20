@@ -46,7 +46,7 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     */\n" +
                 "    @PostMapping(\"/save\")\n" +
                 "    @ResponseBody\n" +
-                "    public Object save(CLASS_NAME_UPPER CLASS_NAME_LOWER) {\n" +
+                "    public Object save(@RequestBody CLASS_NAME_UPPER CLASS_NAME_LOWER) {\n" +
                 "        Integer ret = CLASS_NAME_LOWERService.save(CLASS_NAME_LOWER);\n" +
                 "        return ret;\n" +
                 "    }\n" +
@@ -66,16 +66,13 @@ public class TemplateSourceDefault implements TemplateSource {
                 "    /**\n" +
                 "     * 更新数据\n" +
                 "     *\n" +
-                "     * @param id\n" +
+                "     * @param CLASS_NAME_LOWER\n" +
                 "     * @return\n" +
                 "     */\n" +
                 "    @PutMapping(\"/updateStatus\")\n" +
                 "    @ResponseBody\n" +
-                "    public Object updateStatus(Integer id) {\n" +
-                "        if (id == null || id < 0) {\n" +
-                "            return \"Params id Error\";\n" +
-                "        }\n" +
-                "        return CLASS_NAME_LOWERService.updateStatus(id, 2);\n" +
+                "    public Object updateStatus(CLASS_NAME_UPPER CLASS_NAME_LOWER) {\n" +
+                "    return CLASS_NAME_LOWERService.updateStatus(CLASS_NAME_LOWER, 2);\n" +
                 "    }\n" +
                 "}\n";
     }
@@ -96,7 +93,7 @@ public class TemplateSourceDefault implements TemplateSource {
                 "import javax.persistence.Table;\n" +
                 "import java.io.Serializable;\n" +
                 "import java.util.Date;\n" +
-                "/*\n" +
+                "/**\n" +
                 " * @Author: LiuBing\n" +
                 " * @Description generator\n" +
                 " * @Version: 1.0\n" +
@@ -159,7 +156,7 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     * @param status\n" +
                 "     * @return\n" +
                 "     */\n" +
-                "    public Integer updateStatus(Integer id, Integer status);" +
+                "    public Integer updateStatus(CLASS_NAME_UPPER CLASS_NAME_LOWER, Integer status);" +
                 "}\n";
     }
 
@@ -252,10 +249,7 @@ public class TemplateSourceDefault implements TemplateSource {
                 "     */\n" +
                 "    @Override\n"+
                 "    @Transactional(rollbackFor = Exception.class)\n"+
-                "    public Integer updateStatus(Integer id, Integer status) {\n" +
-                "        CLASS_NAME_UPPER CLASS_NAME_LOWER = new CLASS_NAME_UPPER();\n" +
-                "        CLASS_NAME_LOWER.setId(id);\n" +
-                "        //CLASS_NAME_LOWER.setStatus(status);\n" +
+                "    public Integer updateStatus(CLASS_NAME_UPPER CLASS_NAME_LOWER, Integer status) {\n" +
                 "        return CLASS_NAME_LOWERMapper.updateByPrimaryKeySelective(CLASS_NAME_LOWER);\n" +
                 "    }\n" +
                 "\n" +
